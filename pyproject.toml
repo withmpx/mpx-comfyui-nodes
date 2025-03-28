@@ -1,0 +1,14 @@
+[project]
+name = "mpx-comfyui-node"
+description = "This Module provides nodes to allow the development of 3D Generative AI workflows that use the MasterpieceX Python SDK."
+version = "0.10"
+license = "Apache 2"
+
+# Comfy UI
+[project.urls]
+Repository = "https://github.com/withmpx/mpx-comfyui-nodes"
+
+[tool.comfy]
+PublisherId = "MasterpieceX"
+DisplayName = "mpx-comfyui-nodes"
+Icon = "https://app.masterpiecex.com/logos/brand_x.svg"

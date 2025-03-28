@@ -1,0 +1,4 @@
+python-dotenv
+joblib
+hjson
+mpx-genai-sdk
