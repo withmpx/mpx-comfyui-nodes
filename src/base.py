@@ -4,6 +4,6 @@ from pathlib import Path
 STATIC_PATH = Path(__file__).parent.parent / "static"
 
 class BaseNode():
-    CATEGORY: str = "MpxGenAI"
+    CATEGORY: str = "MPX"
     FUNCTION: str = "execute"
     
