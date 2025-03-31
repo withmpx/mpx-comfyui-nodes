@@ -32,6 +32,8 @@ from .src.nodes.images_to_3dmodels import ImagesTo3DModels
 # MPX GenAI SDK components
 from .src.nodes.text_to_image import TextToImage
 
+from .src.setup_api_key_server import setup_api_key
+
 
 NODE_CLASS_MAPPINGS = {
     # Data display
