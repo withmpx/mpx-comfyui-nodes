@@ -42,7 +42,7 @@ def llm_call(sys_prompt: str,
                 return llm_response.outputs.output
             
         except Exception as e:
-            print("llm_call() -- Error when trying to obtain a response - retrying...")
+            print(f"llm_call() -- Error:\n{e}\nwhen trying to obtain a response - retrying...")
             continue
 
         finally:
