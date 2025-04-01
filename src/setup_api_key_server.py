@@ -30,6 +30,25 @@ if not hasattr(PromptServer.instance, '_mpx_comfyui_key_route_registered'):
         # Call your function to process/store the API key.
         result = setup_api_key(api_key)
         return web.json_response(result)
+    
+    # Define a test route to check the existing API key on startup
+    @routes.get('/mpx_comfyui_api_key_test')
+    async def test_api_key(request: web.Request) -> web.Response:
+        # Get the API key from the environment variable or configuration
+        api_key = os.getenv("MPX_SDK_BEARER_TOKEN")
+        if not api_key or api_key.strip() == "" or api_key == "<your_bearer_token_here>":
+            logger.warning("API key not found in environment variables")
+            return web.json_response({ "status": "error", "message": "API key not found in server, please set it first! Go to Settings > MPX Settings > API key" })
+        # test the API key by creating a client and testing the connection
+        try:
+            _mpx_client = Masterpiecex(bearer_token = api_key)
+            connection_test_result = _mpx_client.connection_test.retrieve()
+            print(f"MPX: Connection test result: {connection_test_result}")
+        except Exception as e:
+            print(f"MPX: Error testing connection: {e}")
+            return web.json_response({ "status": "error", "message": "API Key is invalid! Please reset it from the settings." })
+        # If the connection test is successful, return a success response
+        return web.json_response({ "status": "success", "message": "MPX API key is valid" })
 
     # Mark the route as registered to avoid duplicate registration
     PromptServer.instance._mpx_comfyui_key_route_registered = True
@@ -68,7 +87,7 @@ def setup_api_key(api_key: str):
             print(f"Warning: Unable to set file permissions on {env_path}: {e}")
         
         print("API key stored successfully!")
-        return { "status": "success", "message": "API key stored successfully" }
+        return { "status": "success", "message": "API key stored successfully! Make sure to RESTART the ComfyUI." }
     except Exception as e:
         print(f"Save API Key Error: {e}")
         return { "status": "error", "message": "Failed to store API key" }

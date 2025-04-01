@@ -51,8 +51,12 @@ elif bearer_token == "<your_bearer_token_here>":
     print("^" * 80)
 else:
     print("mpx-comfyui-nodes: Got MPX SDK Bearer Token")
-    _mpx_client = Masterpiecex(bearer_token = bearer_token)
-    print(f"mpx-comfyui-nodes: MPX Connection test result: {_mpx_client.connection_test.retrieve()}")
+    try:
+        _mpx_client = Masterpiecex(bearer_token = bearer_token)
+        print(f"mpx-comfyui-nodes: MPX Connection test result: {_mpx_client.connection_test.retrieve()}")
+    except Exception as e:
+        print("-" * 150)
+        print(f"mpx-comfyui-nodes: Error creating MPX client: {e.message}")
+        print("^" * 150)
 
-# TODO: We need to handle when token is wrong, expired, or invalid.
-# Instead of breaking the all the nodes, we should show a warning message to the user.
+    

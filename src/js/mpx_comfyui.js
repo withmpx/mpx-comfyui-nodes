@@ -9,6 +9,16 @@ app.registerExtension({
   setup() {
     let firstTimeLoadApiKeys = false;
     let firstTimeLoadDocs = false;
+
+    // Test the API key on startup after 10 seconds
+    setTimeout(() => {
+      testAPIKeyOnStartup();
+    }, 5000);
+
+    setInterval(() => {
+      testAPIKeyOnStartup();
+    }, 10 * 60000); // Test the API key every 10 minutes
+
     const debounce = (func, delay) => {
       let timer;
       return (...args) => {
@@ -21,7 +31,7 @@ app.registerExtension({
 
     app.ui.settings.addSetting({
       id: "MPX Settings.MPX",
-      name: "API Key:",
+      name: "API Key (Requires RESTART):",
       type: "text",
       onChange: (newValue) => {
         if (!firstTimeLoadApiKeys) {
@@ -57,16 +67,22 @@ app.registerExtension({
   },
 });
 
+async function testAPIKeyOnStartup() {
+  console.log("Validating API key on startup...");
+  const res = await api.fetchApi("/mpx_comfyui_api_key_test");
+  const resData = await res.json();
+  if (resData.status === "error") {
+    window["app"].extensionManager.toast.add({
+      severity: resData.status || "info",
+      summary: "MPX",
+      detail: resData.message || "Please restart ComfyUI.",
+      life: 500e3,
+    });
+  }
+}
+
 async function saveAPIKeyToEnv(secretKey) {
   if (!secretKey) {
-    console.error("Error: API Key is empty!");
-    // Show a toast message to ask the user to enter the API key
-    window["app"].extensionManager.toast.add({
-      severity: "info",
-      summary: "MPX",
-      detail: "API Key is empty! Please enter the API key.",
-      life: 7e3,
-    });
     return;
   }
 
@@ -90,6 +106,7 @@ async function saveAPIKeyToEnv(secretKey) {
       detail: resData.message || "Please enter the API key.",
       life: 5e3,
     });
+    app.ui.settings.setSettingValue("MPX Settings.MPX", "");
   } catch (error) {
     console.error(`Error: ${error}`);
     window["app"].extensionManager.toast.addAlert("Error: " + error);
