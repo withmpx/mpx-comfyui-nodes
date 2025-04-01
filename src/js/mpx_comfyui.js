@@ -31,7 +31,7 @@ app.registerExtension({
 
     app.ui.settings.addSetting({
       id: "MPX Settings.MPX",
-      name: "API Key:",
+      name: "API Key(After adding the MPX API Key remember to RESTART ComfyUI.):",
       type: "text",
       onChange: (newValue) => {
         if (!firstTimeLoadApiKeys) {
