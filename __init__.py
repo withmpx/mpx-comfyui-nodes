@@ -21,6 +21,7 @@ from .src.nodes.text_to_object_list import TextToObjectList
 from .src.nodes.text_to_story import TextToStory
 from .src.nodes.text_to_script_breakdown import TextToScriptBreakdown
 from .src.nodes.object_list_to_image_list import ObjectListToImageList
+from .src.nodes.transform_object_list import TransformObjectList
 
 # Agents
 from .src.nodes.agent_pick_best_image_from_list import Agent_PickBestImageFromList
@@ -53,6 +54,7 @@ NODE_CLASS_MAPPINGS = {
     "TextToList": TextToList,
     "StringListToText": StringListToText,
     "StringListToStringList": StringListToStringList,
+    "TransformObjectList": TransformObjectList,
 
     # Data transformations - creative
     "TextToObjectList": TextToObjectList,
@@ -89,6 +91,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "TextToList": "Text to StringList",
     "StringListToText": "StringList to Text",
     "StringListToStringList": "StringList to StringList",
+    "TransformObjectList": "ObjectList to ObjectList",
 
     # Data transforms - creative
     "TextToObjectList": "Text to ObjectList",
