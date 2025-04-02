@@ -85,6 +85,7 @@ class TextToStory(BaseNode):
     __DEFAULT_PROMPT_SYS += "- In 'story': Provide the complete narrative with appropriate paragraphing and dialogue formatting. No preamble or explanation.\n"
     __DEFAULT_PROMPT_SYS += "- In 'characters': Provide a numbered list of all characters in the story with detailed character profiles. Each character should be described in a concise description starting with a number followed by a period (e.g., '1. Character description...'). Include: their name, age and gender, personality traits and quirks, visual details, motivations and goals, relationships with other characters, and any significant character arcs or development throughout the story. Focus on elements that help understand their role in the narrative and their impact on the story's themes. Include the protagonist, antagonist, and any supporting characters. Do not use JSON formatting within this section.\n"
     __DEFAULT_PROMPT_SYS += "- In 'reasoning': Explain how the story fulfills the client's requirements, your narrative choices, and how the characters and their arcs serve the story's themes."
+    __DEFAULT_PROMPT_SYS += "Make sure you return the answer as a JSON string with the ```json and ``` markers."
 
     __DEFAULT_PROMPT_HUMAN = "Here are the clients given information:\n\n"
     __DEFAULT_PROMPT_HUMAN += "### (1) The overall gist of what the story is about\n{story_gist}\n\n"
