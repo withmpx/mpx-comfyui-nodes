@@ -8,8 +8,7 @@ Welcome to the MPX ComfyUI Nodes repository. These nodes allow you to perform va
 3. Click on **Install Nodes via Git URL**.
    ![](README/InstallviaGit.png)
 
-4. Copy and paste the following Git URL to install nodes.
-   [withmpx/mpx-comfyui-nodes: ComfyUI nodes using the MasterpieceX API.](https://github.com/withmpx/mpx-comfyui-nodes)
+4. Copy and paste the following Git URL to install nodes: https://github.com/withmpx/mpx-comfyui-nodes
 5. Restart ComfyUI.
 6. Add your Masterpriece X API key in the ComfyUI Settings under **MPX Settings**. If you don’t have a Masterpiece X API key follow the instructions on our documenations page. ([https://docs.masterpiecex.com](https://docs.masterpiecex.com/docs/getting-started#/))
    ![](README/ApiKey.png)
