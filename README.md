@@ -5,7 +5,7 @@ Welcome to the MPX ComfyUI Nodes repository. These nodes allow you to perform va
 
 # Installing MPX ComfyUI Nodes
 
-Watch this video or follow along with the following instructions.
+Click on the image below for a video tutorial or follow along with instructions in the [Step-by-Step installation instructions](#step-by-step-installation-instructions) section.
 
 [![Watch the video](https://img.youtube.com/vi/ReOA4knTZt4/maxresdefault.jpg)](https://www.youtube.com/embed/ReOA4knTZt4?si=-FRaHSzG9ERT4DbF)
 
