@@ -19,7 +19,7 @@ Welcome to the MPX ComfyUI Nodes repository. These nodes allow you to perform va
 We have developed 19 ComfyUI Nodes that leverage LLMs, image generation models, and 3D generation models to help you design custom ComfyUI workflows.  Here are the nodes. 
 
 ### Text to Image(s)
-**Description**: This node takes a text prompt and generates a batch of images. Up to four images can be generated at once. Custom LoRA weights for *FLUX.1-schnell* can be provided as well.
+**Description**: This node takes a text prompt and generates a batch of images. Up to four images can be generated at once.
 ⠀![](README/text-to-image.png)
 
 ### Image(s) to 3D Models(s)
