@@ -1,7 +1,16 @@
 # # MPX ComfyUI Nodes
 
 Welcome to the MPX ComfyUI Nodes repository. These nodes allow you to perform various tasks related to 3D production and design. They enable you to break down an animation script into its props, characters, and scenes, as well as facilitate kitbashing workflows for producing scenes for animatics or conceptual stages in interactive projects. To get started, please ensure that ComfyUI is installed.
+
+
 # Installing MPX ComfyUI Nodes
+
+Watch this video or follow along with the following instructions.
+
+[![Watch the video](https://img.youtube.com/vi/ReOA4knTZt4/maxresdefault.jpg)](https://www.youtube.com/embed/ReOA4knTZt4?si=-FRaHSzG9ERT4DbF)
+
+
+## Step-by-Step installation instructions
 
 1. Open **ComfyUI**.
 2. Open **Comfy Manager**.
