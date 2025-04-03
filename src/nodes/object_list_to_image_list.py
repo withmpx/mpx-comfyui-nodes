@@ -1,3 +1,4 @@
+import os
 import datetime
 import torch
 
@@ -71,6 +72,11 @@ class ObjectListToImageList(BaseNode):
     )
 
     def execute(self, object_list, output_folder, num_processes, seed, used_for_3D=True, only_one_object_per_desc=True):
+
+        if os.path.exists(output_folder) == False:
+            print(f"Output folder: {output_folder} DOES NOT EXIST!")
+            output_folder = get_output_directory()
+            print(f"Defaulting to: {output_folder}")
 
         global num_images_processed
         num_images_processed = 0

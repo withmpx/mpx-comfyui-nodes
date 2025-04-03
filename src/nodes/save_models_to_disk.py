@@ -1,4 +1,5 @@
 # system imports
+import os
 import datetime
 
 # comfyui imports
@@ -52,6 +53,11 @@ class SaveModelsToDisk(BaseNode):
         print("save_models_to_disk")
         print(model_urls)
         print(output_folder)
+
+        if os.path.exists(output_folder) == False:
+            print(f"Output folder: {output_folder} DOES NOT EXIST!")
+            output_folder = get_output_directory()
+            print(f"Defaulting to: {output_folder}")
 
         # Check if the inputs have changed
         input_hash = hash_node_inputs({
