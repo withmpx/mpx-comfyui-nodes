@@ -11,9 +11,7 @@ from folder_paths import get_output_directory
 import comfy.utils
 
 # MPX imports
-from .sdk.llms.call import llm_call
-from .sdk.llms.image_query import image_query
-from .utils.general import hash_node_inputs, parse_llm_json, variable_substitution
+from .utils.general import hash_node_inputs, variable_substitution, llm_call_with_json_parsing, image_query_with_with_json_parsing
 
 from .sdk.components.text_to_image import component_text_to_image
 from .sdk.utils.image_helpers import convert_from_torch_to_PIL, convert_from_PIL_to_torch, convert_batch_tensor_to_tensor_list, download_image_from_url_to_PIL
@@ -52,8 +50,8 @@ def run_prompt_transform(old_prompt, checklist_results, original_theme, custom_u
     extra_params = {}
     extra_params["model"] = "gpt-4o"
 
-    sys_prompt = "You are a natural language expert who is specialized with creating new text prompts from existing text prompts. Your job is to take: (1) an existing user provided prompt, (2) a list of issues which detail what is wrong with it, (3) the original theme of the prompt, (4) some custom user directions and then produce a new prompt that addresses the list of issues as well as adhering to both the original theme of the prompt and the given custom user direcitons. It might be that the original theme and the custom user directions are in conflict with each other. In those cases do your base to balance the two.\n\n"
-    sys_prompt += "Return the answer as only a JSON with a two keys 'new_prompt' and 'reasoning'. In the 'new_prompt' key provide an updated prompt with no premable or explanation. Ensure to address all of the issues that are given to you and that you've done your best to balance between the original theme and the custom user directions. In the 'reasoning' key provide an explanation for why the new prompt makes sense, addressses all of the given issues and also follows both the original theme and the custom user directions. Just the JSON only is returned.\n\n"
+    sys_prompt = "You are a natural language expert who is specialized with creating new text prompts from existing text prompts. Your job is to take: (1) an existing user provided prompt, (2) a list of issues which detail what is wrong with it, (3) the original theme of the prompt, (4) some custom user directions and then produce a new prompt that addresses the list of issues as well as ensuring that the main subject of the user provided prompt still exists in some form and that the new prompt adheres to both the original theme of the prompt and the given custom user direcitons. It might be that keeping the main subject of the user provided prompt with the original theme and the custom user directions are in conflict with each other. In those cases do your base to balance the three.\n\n"
+    sys_prompt += "Return the answer as only a JSON with a two keys 'new_prompt' and 'reasoning'. In the 'new_prompt' key provide an updated prompt with no premable or explanation. Ensure to address all of the issues that are given to you and that you've done your best to balance between the main subject of the user provided prompt, the original theme and the custom user directions. Lean towards keeping the main subject of the user provided prompt with the original theme if the customer user directions does not directly contradict it. In the 'reasoning' key provide an explanation for why the new prompt makes sense, addressses all of the given issues and also follows the custom user directions. Just the JSON only is returned.\n\n"
 
     human_prompt = "### (1) Existing user provided prompt:\n{old_prompt}\n\n"
     human_prompt += "### (2) List of issues with the original prompt:\n{list_of_issues}\n\n"
@@ -70,12 +68,11 @@ def run_prompt_transform(old_prompt, checklist_results, original_theme, custom_u
     sys_prompt = variable_substitution(sys_prompt, prompt_data)
     human_prompt = variable_substitution(human_prompt, prompt_data)
 
-    llm_response = llm_call(sys_prompt, human_prompt, llm_params, extra_params)
-    parsed_response = parse_llm_json(llm_response)
+    parsed_response = llm_call_with_json_parsing(sys_prompt, human_prompt, llm_params, extra_params)
 
-    print("invoke_unit__prompt_transform():")
+    print("run_prompt_transform():")
     print(f"old_prompt = '{old_prompt}'")
-    print(parsed_response)
+    print(f"new_prompt = '{parsed_response}'")
 
     return parsed_response['new_prompt'], parsed_response['reasoning']
 
@@ -96,9 +93,7 @@ def run_through_check_list_compressed(input_image, input_obj_descr, input_user_d
     main_query += "In the 'reasoning' key provide a list of strings which explains how you came to your conclusion for each of the four questions. In each explanation ensure to point to specific elements of the image so that you're not just making up reasons.\n"
     main_query += "In the 'answers' key provide the answer as list consisting of 'yes' and 'no' by thinking things through in a step-by-step fashion. Ensure that no premable or explanation is included. Recall you need to answer questions (1) to (4) so this list should have exactly four elements where each element is either a 'yes' or 'no'.\n"
 
-
-    llm_results = image_query(main_query, [input_image])
-    parsed_results = parse_llm_json(llm_results)
+    parsed_results = image_query_with_with_json_parsing(main_query, [input_image])
 
     print()
     print(parsed_results)

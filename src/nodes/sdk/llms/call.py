@@ -32,13 +32,14 @@ def llm_call(sys_prompt: str,
 
             if llm_response.status == "failed":
                 print("llm_call() returned with failed status - retrying...")
-            elif llm_response.status == "complete":
-                call_success = True
+                continue
 
+            elif llm_response.status == "complete":
                 print("llm_call() - complete!")
                 print("Results:")
                 print(llm_response.outputs.output)
                 print()
+                call_success = True
                 return llm_response.outputs.output
             
         except Exception as e:

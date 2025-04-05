@@ -2,6 +2,9 @@ import hashlib
 import json
 import hjson
 
+from ..sdk.llms.call import llm_call
+from ..sdk.llms.image_query import image_query, image_query_from_urls
+
 
 def hash_node_inputs(inputs: dict) -> str:
     """ 
@@ -54,3 +57,56 @@ def parse_llm_json(s: str):
 def variable_substitution(prompt: str, data: dict):
     return prompt.format(**data)
     
+
+def llm_call_with_json_parsing(sys_prompt: str, 
+                               human_prompt: str, 
+                               llm_params: dict, 
+                               extra_params: dict,
+                               max_retry_attempts: int = 3):
+    call_success = False
+    attempt = 1
+    while (call_success == False) and (attempt <= max_retry_attempts):
+        try:
+            llm_response = llm_call(sys_prompt, human_prompt, llm_params, extra_params)
+            parsed_response = parse_llm_json(llm_response)
+            call_success = True
+            return parsed_response
+        
+        except Exception as e:
+            print(f"llm_call_with_json_parsing() -- Error:\n{e}\nwhen trying to obtain a valid JSON response - retrying...")
+            continue
+
+        finally:
+            attempt += 1
+            if attempt > max_retry_attempts:
+                raise Exception(f"llm_call_with_json_parsing() -- Failed to get a valid response after {max_retry_attempts} attempts!")
+
+def image_query_with_with_json_parsing(query: str,
+                                       input_images: list,
+                                       max_retry_attempts: int = 3,
+                                       **kwargs):
+    call_success = False
+    attempt = 1
+    input_image_urls = None
+    while (call_success == False) and (attempt <= max_retry_attempts):
+        try:
+            # first attempt? need to get the image urls that were uploaded for possible retry attempts
+            if input_image_urls is None:
+                llm_results, input_image_urls = image_query(query, input_images, return_image_urls=True)
+
+            # re-use the uploaded image URLs in the retry attempts
+            else:
+                llm_results = image_query_from_urls(query, input_image_urls)
+
+            parsed_response = parse_llm_json(llm_results)
+            call_success = True
+            return parsed_response
+
+        except Exception as e:
+            print(f"image_query_with_with_json_parsing() -- Error:\n{e}\nwhen trying to obtain a valid JSON response - retrying...")
+            continue
+
+        finally:
+            attempt += 1
+            if attempt > max_retry_attempts:
+                raise Exception(f"image_query_with_with_json_parsing() -- Failed to get a valid response after {max_retry_attempts} attempts!")

@@ -1,5 +1,5 @@
-from .sdk.llms.call import llm_call
-from .utils.general import hash_node_inputs, parse_llm_json, variable_substitution
+# from .sdk.llms.call import llm_call
+from .utils.general import hash_node_inputs, parse_llm_json, variable_substitution, llm_call_with_json_parsing
 
 from ..base import BaseNode
 
@@ -110,9 +110,11 @@ class TextToStory(BaseNode):
         sys_prompt = variable_substitution(TextToStory.__DEFAULT_PROMPT_SYS, prompt_data)
         human_prompt = variable_substitution(TextToStory.__DEFAULT_PROMPT_HUMAN, prompt_data)
 
-        llm_response = llm_call(sys_prompt, human_prompt, llm_params, extra_params)
-        parsed_response = parse_llm_json(llm_response)
+        # llm_response = llm_call(sys_prompt, human_prompt, llm_params, extra_params)
+        # parsed_response = parse_llm_json(llm_response)
         
+        parsed_response = llm_call_with_json_parsing(sys_prompt, human_prompt, llm_params, extra_params)
+
         generated_story = parsed_response['story']
         generated_characters = parsed_response['characters']
         llm_reasoning = parsed_response['reasoning']

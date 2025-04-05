@@ -4,10 +4,8 @@ from joblib import Parallel, delayed, cpu_count
 # comfy imports
 import comfy.utils
 
-
 # MPX imports
-from .sdk.llms.call import llm_call
-from .utils.general import hash_node_inputs, parse_llm_json, variable_substitution
+from .utils.general import hash_node_inputs, variable_substitution, llm_call_with_json_parsing
 
 from ..base import BaseNode
 
@@ -114,8 +112,7 @@ Follow the custom instructions carefully as they contain important details about
             sys_prompt = variable_substitution(TransformObjectList.__DEFAULT_PROMPT_SYS, prompt_data)
             human_prompt = variable_substitution(TransformObjectList.__DEFAULT_PROMPT_HUMAN, prompt_data)
 
-            llm_response = llm_call(sys_prompt, human_prompt, llm_params, extra_params)
-            parsed_response = parse_llm_json(llm_response)
+            parsed_response = llm_call_with_json_parsing(sys_prompt, human_prompt, llm_params, extra_params)
 
             updated_object_description = parsed_response['description']
             LLM_reasoning = parsed_response['reasoning']

@@ -1,4 +1,4 @@
 python-dotenv
 joblib
 hjson
-mpx-genai-sdk
+mpx-genai-sdk>=0.8.0

@@ -3,8 +3,7 @@ import sys
 import torch
 
 # MPX imports    
-from .sdk.llms.image_query import image_query
-from .utils.general import hash_node_inputs, parse_llm_json, variable_substitution
+from .utils.general import hash_node_inputs, image_query_with_with_json_parsing
 from .sdk.utils.image_helpers import convert_from_torch_to_PIL, convert_from_PIL_to_torch  
 
 from ..base import BaseNode
@@ -41,8 +40,7 @@ def pick_best_image_from_four(generated_images, user_conditions, image_info, sty
     query += "   - Explaining why other images were not selected"
     query += "\nNote: When picking the best image, info about the object and conditions are most important and any adherance to style guides are of a lower importance."
 
-    llm_results = image_query(query, generated_images)
-    parsed_results = parse_llm_json(llm_results)
+    parsed_results = image_query_with_with_json_parsing(query, generated_images)
     return parsed_results['image_index'], parsed_results['reasoning']
 
 
