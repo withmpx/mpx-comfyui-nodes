@@ -176,6 +176,11 @@ class Agent_ReflectionOnImageList(BaseNode):
 
     def execute(self, text_prompt, custom_user_directions, images, object_list, output_folder, num_processes, seed):
 
+        if os.path.exists(output_folder) == False:
+            print(f"Output folder: {output_folder} DOES NOT EXIST!")
+            output_folder = get_output_directory()
+            print(f"Defaulting to: {output_folder}")
+
         tensor_list = convert_batch_tensor_to_tensor_list(images)
         image_list = [convert_from_torch_to_PIL(t) for t in tensor_list]
 
