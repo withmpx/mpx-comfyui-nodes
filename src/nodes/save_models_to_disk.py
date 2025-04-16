@@ -50,6 +50,8 @@ class SaveModelsToDisk(BaseNode):
 
     def execute(self, model_urls, output_folder):
 
+        results = []
+
         print("save_models_to_disk")
         print(model_urls)
         print(output_folder)
@@ -65,6 +67,9 @@ class SaveModelsToDisk(BaseNode):
             "output_folder": output_folder,
         })
 
+        # Initialize the dictionary to be returned
+        output_results = { "ui": { "3d_models": [] } }
+
         if input_hash != self._cached_input_hash:
 
             local_filepaths = []
@@ -72,14 +77,28 @@ class SaveModelsToDisk(BaseNode):
             pbar = comfy.utils.ProgressBar(n_models)
             for idx in range(n_models):
                 str_timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+                filename = f"model_{idx}_{str_timestamp}"
                 model_path = download_model_to_disk_from_url(model_urls[idx],
                                                              output_folder,
-                                                             f"model_{idx}_{str_timestamp}")
+                                                             filename)
                 local_filepaths.append(model_path)
                 pbar.update_absolute(idx+1, n_models)
+
+                url_filename, url_file_ext = os.path.splitext(model_urls[idx])
+                filename_with_extension = f"{filename}{url_file_ext}"
+
+
+                # Append directly to the return structure
+                output_results["ui"]["3d_models"].append({
+                    "filename": filename_with_extension,
+                    "subfolder": output_folder,
+                    "type": "output",
+                })
 
             self._cached_output = (local_filepaths,)
             self._cached_input_hash = input_hash
 
-        return self._cached_output
-
+        print("-- Results --")
+        print(output_results["ui"]["3d_models"]) # Print the list we built
+        #return self._cached_output
+        return output_results
